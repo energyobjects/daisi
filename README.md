@@ -1,6 +1,3 @@
-# Fundamental Daisi Implementations
-Simple Daisis
-
-## hello_world
-
+# daisi
+Daisi Examples and Tests
 
