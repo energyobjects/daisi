@@ -10,7 +10,14 @@ def get_cpuinfo():
 def get_df():
     if platform.system() == "Linux":
         command = "df"
-        all_info = subprocess.check_output(command, shell=True).decode().strip()
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
+        return all_info
+    return ""
+
+def get_ps():
+    if platform.system() == "Linux":
+        command = "ps -ef"
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
         return all_info
     return ""
 
