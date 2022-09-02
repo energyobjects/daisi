@@ -7,6 +7,13 @@ def get_cpuinfo():
         return all_info
     return ""
 
+def get_df():
+    if platform.system() == "Linux":
+        command = "df"
+        all_info = subprocess.check_output(command, shell=True).decode().strip()
+        return all_info
+    return ""
+
 def get_processor_name():
     if platform.system() == "Windows":
         return platform.processor()
