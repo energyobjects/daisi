@@ -1,4 +1,4 @@
-# Fundamental Daisi Implementations
+# Simple Daisi Implementations
 Simple Daisis
 
 ## hello_world
