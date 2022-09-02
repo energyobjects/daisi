@@ -1,5 +1,4 @@
 numpy
-matplotlib
 Pillow
 pydaisi
-
+streamlit
