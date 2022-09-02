@@ -3,7 +3,7 @@ import os, platform, subprocess, re
 def get_cpuinfo():
     if platform.system() == "Linux":
         command = "cat /proc/cpuinfo"
-        all_info = subprocess.check_output(command, shell=True).decode().strip()
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
         return all_info
     return ""
 
