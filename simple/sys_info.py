@@ -7,6 +7,9 @@ def get_cpuinfo():
         return all_info
     return ""
 
+def get_cwd():
+    return os.getcwd()
+    
 def get_df():
     if platform.system() == "Linux":
         command = "df"
@@ -17,6 +20,13 @@ def get_df():
 def get_ps():
     if platform.system() == "Linux":
         command = "ps -ef"
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
+        return all_info
+    return ""
+
+def get_hostname():
+    if platform.system() == "Linux":
+        command = "hostname"
         all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
         return all_info
     return ""
