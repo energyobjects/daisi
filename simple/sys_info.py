@@ -9,10 +9,17 @@ def get_cpuinfo():
 
 def get_cwd():
     return os.getcwd()
-    
+
 def get_df():
     if platform.system() == "Linux":
         command = "df"
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
+        return all_info
+    return ""
+
+def get_tree():
+    if platform.system() == "Linux":
+        command = "tree"
         all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
         return all_info
     return ""
