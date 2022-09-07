@@ -1,14 +1,14 @@
-from IPython.display import HTML
+#from IPython.display import HTML
 from matplotlib import animation
 from matplotlib import pyplot as plt
-from matplotlib.animation import writers
+#import matplotlib.animation
 from numba import jit
 import numpy as np
 import os
-from PIL import Image, ImageOps
+from PIL import Image
 import streamlit as st
 import tempfile
-import time
+import uuid
 
 #initial_grid = np.zeros(shape=(imgshape[0], imgshape[1]), dtype=np.int8)
 #for i in range(imgshape[0]):
@@ -88,17 +88,17 @@ def cgol(initial: np.array, timesteps: int):
     plt.axis('off')
     plt.close()
     anim = animation.ArtistAnimation(fig, ims, interval=100, repeat=False)
-    tmp_dir = tempfile.gettempdir()
-    anim.save(f"{tmp_dir}/cgol.gif", writer='pillow')
+    tmp_filename = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()) + ".gif")
+    anim.save(tmp_filename, writer='pillow')
 
     del grid_b
     del grid_a
 
-    return f"{tmp_dir}/cgol.gif"
+    return tmp_filename
 
 def st_ui():
     st.title("Conway's Game of Life")
-    time_steps = st.slider('How many time steps?', 10, 200, 100, 10)
+    time_steps = st.sidebar.slider('How many time steps?', 10, 200, 100, 10)
     user_image = st.sidebar.file_uploader("Load your own image")
     if user_image is not None:
         src_img = Image.open(user_image)
@@ -107,9 +107,9 @@ def st_ui():
     w, h = src_img.size
     if h > 720:
         src_img = src_img.resize((int((float(src_img.size[0]) * float((720 / float(src_img.size[1]))))), 720), Image.NEAREST)
-    st.header("Image to Create the Initial Grid From")
+    st.header("The initial grid will be created from this image:")
     st.image(src_img)
-    draw_landmark_button = st.button('Run the Simulation')
+    run_simulation_button = st.button('Run the Simulation')
     npimg = np.array(src_img)
     imgshape = npimg.shape
     mid_value = int(np.iinfo(npimg.dtype).max / 2) * imgshape[2]
@@ -119,9 +119,10 @@ def st_ui():
         for j in range(imgshape[1]):
             initial_grid[i+1,j+1] = (int(npimg[i,j,0]) + npimg[i,j,1] + npimg[i,j,2]) < mid_value
 
-    ani_file = cgol(initial_grid, time_steps)
-    if draw_landmark_button:
-        st.header("Game Animation")
+    if run_simulation_button:
+        with st.spinner("Running simulation..."):
+            ani_file = cgol(initial_grid, time_steps)
+        st.header("The game animation as been generated:")
         with open(ani_file, "rb") as fp:
             btn = st.download_button(
                 label="Download Animation",
