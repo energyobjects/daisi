@@ -1,7 +1,5 @@
-#from IPython.display import HTML
 from matplotlib import animation
 from matplotlib import pyplot as plt
-#import matplotlib.animation
 from numba import jit
 import numpy as np
 import os
@@ -9,14 +7,6 @@ from PIL import Image
 import streamlit as st
 import tempfile
 import uuid
-
-#initial_grid = np.zeros(shape=(imgshape[0], imgshape[1]), dtype=np.int8)
-#for i in range(imgshape[0]):
-#    for j in range(imgshape[1]):
-#        initial_grid[i,j] = (int(npimg[i,j,0]) + npimg[i,j,1] + npimg[i,j,2]) > mid_value
-
-# Random initial grid
-#initial_grid = np.random.randint(2, size=(imgshape[0], imgshape[1]))
 
 @jit(nopython=True)
 def _cgol_tick(grid_a: np.array, grid_b: np.array, grid_shape):
@@ -33,32 +23,6 @@ def _cgol_tick(grid_a: np.array, grid_b: np.array, grid_shape):
             neighbor_count += grid_a[x+1][y+1]
             neighbor_count += grid_a[x][y-1]
             neighbor_count += grid_a[x][y+1]
-
-            if grid_a[x,y] == 0:
-                # Not alive
-                if neighbor_count == 3:
-                    new_state = 1
-            else:
-                # Alive
-                if neighbor_count < 2 or neighbor_count > 3:
-                    new_state = 0
-            grid_b[x,y] = new_state
-
-@jit(nopython=True)
-def _cgol_tick2(grid_a: np.array, grid_b: np.array, grid_shape):
-    for y in range(grid_shape[0]):
-        # For each horizontal index
-        for x in range(grid_shape[1]):
-            new_state = grid_a[x,y]
-            neighbor_count = 0
-            neighbor_count += grid_a[x-1][y-1] if x > 0 and y > 0 else 0
-            neighbor_count += grid_a[x-1][y] if x > 0 else 0
-            neighbor_count += grid_a[x-1][y+1] if x > 0 and y < grid_shape[0] - 1 else 0
-            neighbor_count += grid_a[x+1][y-1] if x < grid_shape[1] - 1 and y > 0 else 0
-            neighbor_count += grid_a[x+1][y] if x < grid_shape[1] - 1 else 0
-            neighbor_count += grid_a[x+1][y+1] if x < grid_shape[1] - 1 and y < grid_shape[0] - 1 else 0
-            neighbor_count += grid_a[x][y-1] if y > 0 else 0
-            neighbor_count += grid_a[x][y+1] if x > 0 and y < grid_shape[0] - 1 else 0
 
             if grid_a[x,y] == 0:
                 # Not alive
