@@ -107,7 +107,7 @@ def st_ui():
     w, h = src_img.size
     if h > 720:
         src_img = src_img.resize((int((float(src_img.size[0]) * float((720 / float(src_img.size[1]))))), 720), Image.NEAREST)
-    st.header("Original image")
+    st.header("Image to Create the Initial Grid From")
     st.image(src_img)
     draw_landmark_button = st.button('Run the Simulation')
     npimg = np.array(src_img)
