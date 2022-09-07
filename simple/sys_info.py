@@ -17,9 +17,16 @@ def get_df():
         return all_info
     return ""
 
-def get_tree():
+def get_du():
     if platform.system() == "Linux":
-        command = "tree"
+        command = "du -a"
+        all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
+        return all_info
+    return ""
+
+def get_ls():
+    if platform.system() == "Linux":
+        command = "ls -R"
         all_info = subprocess.check_output(command, shell=True).decode().strip().replace('\n', '<br/>')
         return all_info
     return ""
