@@ -40,6 +40,7 @@ def cgol(initial: np.array, timesteps: int):
     grid_shape = initial.shape
     grid_a = np.array(initial, copy=True)
     grid_b = np.zeros(shape=(grid_shape[0], grid_shape[1]), dtype=np.int8)
+    progress_bar = st.progress(0)
     # For each timestep
     for t in range(timesteps):
         # For each vertical index
@@ -49,14 +50,18 @@ def cgol(initial: np.array, timesteps: int):
         tmp_grid = grid_a
         grid_a = grid_b
         grid_b = tmp_grid
+        progress_bar.progress(t/(timesteps*1.5))
     plt.axis('off')
     plt.close()
+    progress_bar.progress(timesteps/(timesteps*1.4))
     anim = animation.ArtistAnimation(fig, ims, interval=100, repeat=False)
+    progress_bar.progress(timesteps/(timesteps*1.2))
     tmp_filename = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()) + ".gif")
     anim.save(tmp_filename, writer='pillow')
 
     del grid_b
     del grid_a
+    progress_bar.progress(1.0)
 
     return tmp_filename
 
@@ -84,8 +89,7 @@ def st_ui():
             initial_grid[i+1,j+1] = (int(npimg[i,j,0]) + npimg[i,j,1] + npimg[i,j,2]) < mid_value
 
     if run_simulation_button:
-        with st.spinner("Running simulation..."):
-            ani_file = cgol(initial_grid, time_steps)
+        ani_file = cgol(initial_grid, time_steps)
         st.header("The game animation as been generated:")
         with open(ani_file, "rb") as fp:
             btn = st.download_button(
