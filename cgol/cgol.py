@@ -1,3 +1,4 @@
+import base64
 from matplotlib import animation
 from matplotlib import pyplot as plt
 from numba import jit
@@ -92,12 +93,12 @@ def st_ui():
         ani_file = cgol(initial_grid, time_steps)
         st.header("The game animation as been generated:")
         with open(ani_file, "rb") as fp:
-            btn = st.download_button(
-                label="Download Animation",
-                data=fp,
-                file_name="cgol.gif",
-                mime="image/gif"
-            )
+            contents = fp.read()
+            data_url = base64.b64encode(contents).decode("utf-8")
+            st.markdown(
+                f'<img src="data:image/gif;base64,{data_url}" alt="cat gif">',
+                unsafe_allow_html=True,
+                )
 
 
 if __name__ == '__main__':
